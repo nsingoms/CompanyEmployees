@@ -1,7 +1,11 @@
-﻿namespace CompanyEmployees.Presentation
-{
-   public static class AssemblyReference
-   {
+﻿using System.ComponentModel;
+using System;
 
-   }
+namespace CompanyEmployees.Presentation;
+
+public static class AssemblyReference
+{
+
 }
+
+

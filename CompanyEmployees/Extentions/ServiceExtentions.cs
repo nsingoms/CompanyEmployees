@@ -16,8 +16,10 @@ public static class ServiceExtentions
          options.AddPolicy("MyPolicy", builder =>
                                      builder.AllowAnyOrigin()
                                     .AllowAnyMethod()
-                                    .AllowAnyHeader());
-      });
+                                    .AllowAnyHeader()
+                                    .WithExposedHeaders("X-Pagination"));
+
+   });
 
    }
    public static void ConfigureIISConfiguration(this IServiceCollection services)

@@ -1,9 +1,11 @@
-
 using CompanyEmployees.Extentions;
+using CompanyEmployees.Presentation.ActionFilters;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
+using Service.DataShaping;
+using Shared.DataTransferObjects;
 
 namespace CompanyEmployees
 {
@@ -20,11 +22,13 @@ namespace CompanyEmployees
          builder.Services.ConfigureLoggerService();
          builder.Services.ConfigureRepositoryManager();
          builder.Services.ConfigureServiceManager();
-         builder.Services.ConfigureSqlContext(builder.Configuration);
+         builder.Services.ConfigureSqlContext(builder.Configuration); builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+
          builder.Services.Configure<ApiBehaviorOptions>(options =>
          {
             options.SuppressModelStateInvalidFilter = true;
          });
+         builder.Services.AddScoped<ValidationFilterAttribute>();
 
          builder.Services.AddControllers(config =>
                {
