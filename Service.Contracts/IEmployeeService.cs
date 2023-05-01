@@ -1,13 +1,14 @@
-﻿using Shared.DataTransferObjects;
+﻿using Entities.LinkModels;
+using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
-using System.Collections.Generic;
-using System.Dynamic;
 
 namespace Service.Contracts;
 
 public interface IEmployeeService
 {
-   Task<(IEnumerable<ExpandoObject> employees, MetaData metaData)> GetEmployees(Guid companyId, EmployeeParameters employeeParameters, bool trackChanges);
+   Task<(LinkResponse linkResponse, MetaData metaData)> GetEmployees(Guid companyId,
+                                 LinkParameters linkParameters, bool trackChanges);
+
    Task<EmployeeDto> GetEmployee(Guid companyId, Guid id, bool trackChanges);
    Task<EmployeeDto> CreateEmployeeForCompany(Guid companyId, EmployeeForCreationDto
    employeeForCreation, bool trackChanges);

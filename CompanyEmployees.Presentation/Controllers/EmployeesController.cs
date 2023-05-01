@@ -1,4 +1,5 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
+using Entities.LinkModels;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -16,13 +17,18 @@ public class EmployeesController : ControllerBase
 
 
    [HttpGet]
+   [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+
    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
    {
-      var pagedResult = await _service.EmployeeService.GetEmployees(companyId,
-                                       employeeParameters, trackChanges: false);
-      Response.Headers.Add("X-Pagination",
-      JsonSerializer.Serialize(pagedResult.metaData));
-      return Ok(pagedResult);
+      var linkParams = new LinkParameters(employeeParameters, HttpContext);
+
+      var result = await _service.EmployeeService.GetEmployees(companyId,
+                                         linkParams, trackChanges: false);
+      Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.metaData));
+
+      return result.linkResponse.HasLinks ? Ok(result.linkResponse.LinkedEntities) :
+ Ok(result.linkResponse.ShapedEntities);
 
    }
 

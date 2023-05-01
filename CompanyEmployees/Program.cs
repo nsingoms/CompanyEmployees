@@ -1,5 +1,6 @@
 using CompanyEmployees.Extentions;
 using CompanyEmployees.Presentation.ActionFilters;
+using CompanyEmployees.Utility;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,8 @@ namespace CompanyEmployees
          builder.Services.ConfigureRepositoryManager();
          builder.Services.ConfigureServiceManager();
          builder.Services.ConfigureSqlContext(builder.Configuration); builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
-
+         builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+         builder.Services.AddScoped<IEmployeeLinks, EmployeeLinks>();
          builder.Services.Configure<ApiBehaviorOptions>(options =>
          {
             options.SuppressModelStateInvalidFilter = true;
@@ -38,7 +40,8 @@ namespace CompanyEmployees
                  .AddCustomCSVFormatter()
                  .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
          builder.Services.AddAutoMapper(typeof(Program));
-
+         builder.Services.AddCustomMediaTypes();
+         builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
 
          var app = builder.Build();
 

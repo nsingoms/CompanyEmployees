@@ -1,5 +1,6 @@
 ﻿using Entities.Models;
 using Shared.RequestFeatures;
+using System.Net.Http;
 
 namespace Contracts;
 

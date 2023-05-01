@@ -18,12 +18,10 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
             .FilterEmployees(employeeParameters.MinAge, employeeParameters.MaxAge)
             .Search(employeeParameters.SearchTerm)
             .Sort(employeeParameters.OrderBy)
-            .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
-            .Take(employeeParameters.PageSize)
             .ToListAsync();
-      var count = await FindbyCondition(e => e.CompanyId.Equals(companyId), trackChanges
-      ).CountAsync();
-      return new PagedList<Employee>(employees, count, employeeParameters.PageNumber, employeeParameters.PageSize);
+    
+      return  PagedList<Employee>
+                .ToPagedList(employees, employeeParameters.PageNumber, employeeParameters.PageSize);
    }
    public async Task<Employee> GetEmployee(Guid companyId, Guid id, bool trackChanges) =>
       await FindbyCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(id),

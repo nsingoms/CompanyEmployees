@@ -27,6 +27,7 @@ orderByQueryString)
       var orderQuery = OrderQueryBuilder.CreateOrderQuery<Employee>(orderByQueryString);
       if (string.IsNullOrWhiteSpace(orderQuery))
          return employees.OrderBy(e => e.Name);
+
       return employees.OrderBy(orderQuery);
    }
 }
