@@ -24,7 +24,7 @@ public class CsvOutputFormatter : TextOutputFormatter
       }
       return false;
    }
-   public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext
+   public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext?
   context, Encoding selectedEncoding)
    {
       var response = context.HttpContext.Response;

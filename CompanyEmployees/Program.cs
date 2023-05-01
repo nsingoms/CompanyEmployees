@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using CompanyEmployees.Extentions;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Utility;
@@ -23,6 +24,16 @@ namespace CompanyEmployees
          builder.Services.ConfigureLoggerService();
          builder.Services.ConfigureRepositoryManager();
          builder.Services.ConfigureServiceManager();
+         builder.Services.ConfigureVersioning();
+         builder.Services.AddMemoryCache();
+         builder.Services.ConfigureResponseCaching();
+         builder.Services.ConfigureHttpCacheHeaders();
+         builder.Services.ConfigureRateLimitingOptions();
+         builder.Services.AddHttpContextAccessor();
+         builder.Services.AddAuthentication();
+         builder.Services.ConfigureIdentity();
+         builder.Services.ConfigureJWT(builder.Configuration);
+
          builder.Services.ConfigureSqlContext(builder.Configuration); builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
          builder.Services.AddScoped<ValidateMediaTypeAttribute>();
          builder.Services.AddScoped<IEmployeeLinks, EmployeeLinks>();
@@ -36,6 +47,11 @@ namespace CompanyEmployees
                {
                   config.RespectBrowserAcceptHeader = true;
                   config.ReturnHttpNotAcceptable = true;
+                  config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                  {
+                     Duration =
+                  120
+                  });
                }).AddXmlDataContractSerializerFormatters()
                  .AddCustomCSVFormatter()
                  .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
@@ -57,10 +73,14 @@ namespace CompanyEmployees
          {
             ForwardedHeaders = ForwardedHeaders.All
          });
+         app.UseIpRateLimiting();
+
          app.UseCors("CorsPolicy");
+         app.UseAuthentication();
          app.UseAuthorization();
 
-
+         app.UseResponseCaching();
+         app.UseHttpCacheHeaders();
          app.MapControllers();
 
          app.Run();

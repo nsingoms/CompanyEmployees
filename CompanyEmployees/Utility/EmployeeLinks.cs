@@ -46,7 +46,7 @@ string fields, Guid companyId, HttpContext httpContext, List<Entity> shapedEmplo
       {
          var employeeLinks = CreateLinksForEmployee(httpContext, companyId,
         employeeDtoList[index].Id, fields);
-         shapedEmployees[index].Add("Links", employeeLinks);
+         //shapedEmployees[index].Add("Links", employeeLinks);
       }
       var employeeCollection = new LinkCollectionWrapper<Entity>(shapedEmployees);
       var linkedEmployees = CreateLinksForEmployees(httpContext, employeeCollection);

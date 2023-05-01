@@ -1,9 +1,12 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using System.Xml.Linq;
 
 namespace CompanyEmployees.Presentation.Controllers;
+[ApiVersion("1.0")]
 
 [Route("api/companies")]
 [ApiController]
@@ -20,7 +23,10 @@ public class CompaniesController : ControllerBase
       return Ok();
    }
 
-   [HttpGet]
+   [HttpGet(Name = "GetCompanies")][Authorize]
+
+   [ResponseCache(CacheProfileName = "120SecondsDuration")] 
+
    public async Task<IActionResult> GetCompanies()
    {
 
@@ -57,7 +63,7 @@ IEnumerable<CompanyForCreationDto> companyCollection)
    }
 
 
-   [HttpPost]
+   [HttpPost(Name = "CreateCompany")]
    [ServiceFilter(typeof(ValidationFilterAttribute))]
    public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
    {
